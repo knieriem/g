@@ -99,7 +99,7 @@ func (d *decoder) readHeader() {
 		}
 		switch f[0] {
 		case "#define":
-			if iu := strings.LastIndex(f[1], "_"); iu != -1 {
+			if iu := strings.Index(f[1], "_"); iu != -1 {
 				s := f[1][:iu]
 				switch name {
 				case "":
