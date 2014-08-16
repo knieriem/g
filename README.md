@@ -1,11 +1,5 @@
 ## Utility packages for Go.
 
-*	__sercom__
-
-	Access to serial ports on Linux and Windows. A port may
-	also be served and dialed to via [*9P*][9P].
-
-
 *	__go9p__
 
 	Utility functions for [go9p][]
@@ -50,29 +44,3 @@
 [go9p]: http://code.google.com/p/go9p/
 [hg-git]: http://hg-git.github.com/
 [tokenize]: http://plan9.bell-labs.com/magic/man2html/2/getfields
-
-
-## Installation
-
-Using the new Go tool, single packages along with their dependencies
-can be installed by running
-
-	go get github.com/knieriem/g/PACKAGE
-
-For instance,
-
-	go get github.com/knieriem/g/sercom
-
-will install the serial port package, and it will make sure that
-its dependencies
-
-	code.google.com/p/go9p/p
-	code.google.com/p/go9p/p/clnt
-	code.google.com/p/go9p/p/srv
-	github.com/knieriem/g/syscall
-	github.com/knieriem/g/go9p/user
-	github.com/knieriem/g/ioutil
-
-are present and installed too.
-
-Directory `examples' contains programs making use of some of the packages.
