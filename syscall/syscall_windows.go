@@ -66,3 +66,5 @@ func GetCommState(h syscall.Handle, dcb *DCB) (err error) {
 }
 
 //sys RegEnumValue(h syscall.Handle, index uint32, vName *uint16, vNameLen *uint32, reserved *uint32, typ *uint32, data *byte, sz *uint32) (err error) [failretval!=ERROR_SUCCESS] = advapi32.RegEnumValueW
+
+//sys SetConsoleMode(h syscall.Handle, mode uint32) (err error) [failretval==FALSE]
