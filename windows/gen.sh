@@ -27,11 +27,9 @@ SFX=_${OS}_$GOARCH.go
 src=${pkg}_$OS.go
 mv $src _$src
 sed '/^package/s,syscall,none,' <_$src >$src
-GOARCH= GOOS= go build $mksyscall $GOROOT/src/pkg/syscall/mksyscall_windows.go
+GOARCH= GOOS= go build $mksyscall $GOROOT/src/syscall/mksyscall_windows.go
 ./mksyscall_windows $src |
-	sed '/import.*unsafe/a\
-import "syscall"' |
-	sed 's,EINVAL,syscall.EINVAL,g;s,Syscall,syscall.Syscall,;s,NewLazyDLL,syscall.NewLazyDLL,;s/^package.*syscall/package '$pkg'/' |
+	sed 's/^package.*none/package '$pkg'/' |
 	gofmt > z$pkg$SFX
 rm -f mksyscall_windows
 rm -f $src
@@ -39,7 +37,7 @@ mv _$src $src
 
 if test -f $OS/types.go; then
 	# note: cgo execution depends on $GOARCH value
-	GCC=$GCC go tool cgo -godefs $OS/types.go  |
+	CC=$GCC go tool cgo -godefs $OS/types.go  |
 		sed '/Pad_cgo_0/c\
 		Flags	uint32' |
 		awk -f $ZDIR/fixtype.awk |
@@ -69,7 +67,7 @@ EOF
 	echo ')'
 ) > ,,const.go
 
-GCC=$GCC go tool cgo -godefs ,,const.go |
+CC=$GCC go tool cgo -godefs ,,const.go |
 	awk -f $ZDIR/fixtype.awk |
 	gofmt > zconst$SFX
 rm -f ,,const.go
