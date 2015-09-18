@@ -5,7 +5,7 @@
 
 // IsTerminal is based on a function in go.crypto/ssh/terminal/util.go
 
-package ioutil
+package terminal
 
 import (
 	"golang.org/x/sys/unix"
