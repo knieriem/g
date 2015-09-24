@@ -4,15 +4,9 @@
 
 	Utility functions for [go9p][]
 
-
 *	__text__
 
 	Plain text processing utilities.
-
-	Contains `Tokenize`, an implementation of an
-	equally named [function of Plan 9's libc][tokenize]
-	(similar to `string.Fields`, but with interpretation of
-	single quotes).
 
 *	__image__
 
