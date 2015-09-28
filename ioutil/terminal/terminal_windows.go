@@ -11,6 +11,10 @@ import (
 	win "github.com/knieriem/g/syscall"
 )
 
+const (
+	termOutFilename = "CONOUT$"
+)
+
 // IsTerminal and Restore are based on functions in
 // golang.org/x/crypto/ssh/terminal/util_windows.go,
 // and DisableFlags is derived from MakeRaw().

@@ -14,6 +14,10 @@ import (
 	"unsafe"
 )
 
+const (
+	termOutFilename = "/dev/tty"
+)
+
 // These constants are declared here, rather than importing
 // them from the syscall package as some syscall/unix packages, even
 // on linux, for example gccgo, do not declare them.
