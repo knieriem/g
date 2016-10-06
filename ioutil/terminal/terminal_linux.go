@@ -15,6 +15,7 @@ import (
 )
 
 const (
+	termInFilename  = "/dev/tty"
 	termOutFilename = "/dev/tty"
 )
 

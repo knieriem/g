@@ -12,6 +12,7 @@ import (
 )
 
 const (
+	termInFilename  = "CONIN$"
 	termOutFilename = "CONOUT$"
 )
 
