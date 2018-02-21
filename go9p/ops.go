@@ -1,7 +1,7 @@
 package go9p
 
 import (
-	"code.google.com/p/go9p/p/srv"
+	"github.com/lionkov/go9p/p/srv"
 )
 
 func lazysetupChan(C *chan *srv.Conn) {
