@@ -2,14 +2,43 @@
 
 package syscall
 
-import "unsafe"
-import "syscall"
+import (
+	"syscall"
+	"unsafe"
+
+	"golang.org/x/sys/windows"
+)
 
 var _ unsafe.Pointer
 
+// Do the interface allocations only once for common
+// Errno values.
+const (
+	errnoERROR_IO_PENDING = 997
+)
+
 var (
-	modkernel32 = syscall.NewLazyDLL("kernel32.dll")
-	modadvapi32 = syscall.NewLazyDLL("advapi32.dll")
+	errERROR_IO_PENDING error = syscall.Errno(errnoERROR_IO_PENDING)
+)
+
+// errnoErr returns common boxed Errno values, to prevent
+// allocations at runtime.
+func errnoErr(e syscall.Errno) error {
+	switch e {
+	case 0:
+		return nil
+	case errnoERROR_IO_PENDING:
+		return errERROR_IO_PENDING
+	}
+	// TODO: add more here, after collecting data on the common
+	// error values see on Windows. (perhaps when running
+	// all.bat?)
+	return e
+}
+
+var (
+	modkernel32 = windows.NewLazySystemDLL("kernel32.dll")
+	modadvapi32 = windows.NewLazySystemDLL("advapi32.dll")
 
 	procCreateEventW        = modkernel32.NewProc("CreateEventW")
 	procSetEvent            = modkernel32.NewProc("SetEvent")
@@ -29,7 +58,7 @@ func CreateEventW(sa *syscall.SecurityAttributes, manualReset int, initialState 
 	hEv = syscall.Handle(r0)
 	if hEv == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -41,7 +70,7 @@ func SetEvent(h syscall.Handle) (err error) {
 	r1, _, e1 := syscall.Syscall(procSetEvent.Addr(), 1, uintptr(h), 0, 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -53,7 +82,7 @@ func GetOverlappedResult(h syscall.Handle, ov *syscall.Overlapped, done *uint32,
 	r1, _, e1 := syscall.Syscall6(procGetOverlappedResult.Addr(), 4, uintptr(h), uintptr(unsafe.Pointer(ov)), uintptr(unsafe.Pointer(done)), uintptr(bWait), 0, 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -65,7 +94,7 @@ func EscapeCommFunction(h syscall.Handle, fn uint32) (err error) {
 	r1, _, e1 := syscall.Syscall(procEscapeCommFunction.Addr(), 2, uintptr(h), uintptr(fn), 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -77,7 +106,7 @@ func SetupComm(h syscall.Handle, inQSize uint32, outQSize uint32) (err error) {
 	r1, _, e1 := syscall.Syscall(procSetupComm.Addr(), 3, uintptr(h), uintptr(inQSize), uintptr(outQSize))
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -89,7 +118,7 @@ func SetCommTimeouts(h syscall.Handle, cto *CommTimeouts) (err error) {
 	r1, _, e1 := syscall.Syscall(procSetCommTimeouts.Addr(), 2, uintptr(h), uintptr(unsafe.Pointer(cto)), 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -101,7 +130,7 @@ func setCommState(h syscall.Handle, dcb *DCB) (err error) {
 	r1, _, e1 := syscall.Syscall(procSetCommState.Addr(), 2, uintptr(h), uintptr(unsafe.Pointer(dcb)), 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -113,7 +142,7 @@ func getCommState(h syscall.Handle, dcb *DCB) (err error) {
 	r1, _, e1 := syscall.Syscall(procGetCommState.Addr(), 2, uintptr(h), uintptr(unsafe.Pointer(dcb)), 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -125,7 +154,7 @@ func FlushFileBuffers(h syscall.Handle) (err error) {
 	r1, _, e1 := syscall.Syscall(procFlushFileBuffers.Addr(), 1, uintptr(h), 0, 0)
 	if r1 == 0 {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -137,7 +166,7 @@ func RegEnumValue(h syscall.Handle, index uint32, vName *uint16, vNameLen *uint3
 	r1, _, e1 := syscall.Syscall9(procRegEnumValueW.Addr(), 8, uintptr(h), uintptr(index), uintptr(unsafe.Pointer(vName)), uintptr(unsafe.Pointer(vNameLen)), uintptr(unsafe.Pointer(reserved)), uintptr(unsafe.Pointer(typ)), uintptr(unsafe.Pointer(data)), uintptr(unsafe.Pointer(sz)), 0)
 	if r1 != ERROR_SUCCESS {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}
@@ -149,7 +178,7 @@ func SetConsoleMode(h syscall.Handle, mode uint32) (err error) {
 	r1, _, e1 := syscall.Syscall(procSetConsoleMode.Addr(), 2, uintptr(h), uintptr(mode), 0)
 	if r1 == FALSE {
 		if e1 != 0 {
-			err = error(e1)
+			err = errnoErr(e1)
 		} else {
 			err = syscall.EINVAL
 		}

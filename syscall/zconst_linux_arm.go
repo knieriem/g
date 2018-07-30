@@ -18,6 +18,7 @@ const (
 	VTIME  = 0x5
 	VMIN   = 0x6
 	CLOCAL = 0x800
+	CREAD  = 0x80
 
 	CBAUD    = 0x100f
 	B0       = 0x0
@@ -84,4 +85,6 @@ const (
 	TIOCM_CAR = 0x40
 	TIOCM_RNG = 0x80
 	TIOCM_DSR = 0x100
+
+	ASYNC_LOW_LATENCY = 0x2000
 )

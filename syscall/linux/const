@@ -86,3 +86,6 @@ TIOCM_CTS
 TIOCM_CAR       // DCD
 TIOCM_RNG
 TIOCM_DSR
+
+// struct serial
+ASYNC_LOW_LATENCY

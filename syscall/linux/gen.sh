@@ -2,9 +2,14 @@ pkg=syscall
 OS=$GOOS
 ARCH=$GOARCH
 
-mksyscall=`go env GOROOT`/src/pkg/syscall/mksyscall.pl
+if test $GOARCH = arm; then
+	CC=arm-linux-gnueabi-gcc
+	export CC
+fi
 
-perl $mksyscall ${pkg}_$OS.go |
+mksyscall=`go env GOROOT`/src/syscall/mksyscall.pl
+
+perl $mksyscall -tags ${OS},$ARCH ${pkg}_$OS.go |
 	sed 's/^package.*syscall$$/package $*/' |
 	sed '/^import/a \
 		import "syscall"' |
@@ -23,6 +28,7 @@ package $pkg
 /*
 #include <unistd.h>
 #include <termios.h>
+#include <linux/tty_flags.h>
 #include <sys/ioctl.h>
 */
 import "C"
