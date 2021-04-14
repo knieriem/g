@@ -2,6 +2,7 @@ W=../windows
 
 OSARCH=\
 	linux_arm\
+	linux_arm64\
 	linux_386\
 	linux_amd64\
 	windows_386\
