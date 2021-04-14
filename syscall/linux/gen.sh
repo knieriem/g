@@ -19,6 +19,7 @@ perl $mksyscall -tags ${OS},$ARCH ${pkg}_$OS.go |
 
 # note: cgo execution depends on $GOARCH value
 go tool cgo -godefs $OS/types.go  |
+	sed '/^.. cgo -godefs/s,[^ ]\+/types.go,linux/types.go,' |
 	gofmt >ztypes_${OS}_$ARCH.go
 
 
@@ -42,5 +43,7 @@ EOF
 	echo ')'
 ) > ,,const.go
 
-go tool cgo -godefs ,,const.go | gofmt > zconst_${OS}_$ARCH.go
+go tool cgo -godefs ,,const.go |
+	sed '/^.. cgo -godefs/s/[^ ]\+const.go/,,const.go/' |
+	gofmt > zconst_${OS}_$ARCH.go
 rm -f ,,const.go

@@ -36,6 +36,7 @@ mv _$src $src
 if test -f $OS/types.go; then
 	# note: cgo execution depends on $GOARCH value
 	CC=$GCC go tool cgo -godefs $OS/types.go  |
+		sed '/^.. cgo -godefs/s,[^ ]\+types.go,windows/types.go,' |
 		sed '/Pad_cgo_0/c\
 		Flags	uint32' |
 		awk -f $ZDIR/fixtype.awk |
@@ -66,6 +67,7 @@ EOF
 ) > ,,const.go
 
 CC=$GCC go tool cgo -godefs ,,const.go |
+	sed '/^.. cgo -godefs/s/[^ ]\+const.go/,,const.go/' |
 	awk -f $ZDIR/fixtype.awk |
 	gofmt > zconst$SFX
 rm -f ,,const.go
