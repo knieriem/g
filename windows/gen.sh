@@ -9,10 +9,10 @@ GOROOT=`go env GOROOT`
 
 case $GOARCH in
 386)
-	gccarch=i686
+	gccarch=i686-w64-mingw32
 	;;
 amd64)
-	gccarch=x86_64
+	gccarch=x86_64-w64-mingw32
 	;;
 *)
 	echo GOARCH $GOARCH not supported
@@ -20,7 +20,7 @@ amd64)
 	;;
 esac
 
-GCC=/usr/bin/$gccarch-w64-mingw32-gcc
+GCC=/usr/bin/$gccarch-gcc
 
 SFX=_${OS}_$GOARCH.go
 
