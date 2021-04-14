@@ -27,11 +27,9 @@ SFX=_${OS}_$GOARCH.go
 src=${pkg}_$OS.go
 mv $src _$src
 sed '/^package/s,syscall,none,' <_$src >$src
-GOARCH= GOOS= go build $mksyscall $GOROOT/src/syscall/mksyscall_windows.go
-./mksyscall_windows $src |
+GOARCH= GOOS= go run golang.org/x/sys/windows/mkwinsyscall $src |
 	sed 's/^package.*none/package '$pkg'/' |
 	gofmt > z$pkg$SFX
-rm -f mksyscall_windows
 rm -f $src
 mv _$src $src
 
