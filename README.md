@@ -2,11 +2,7 @@
 
 *	__go9p__
 
-	Utility functions for [go9p][]
-
-*	__text__
-
-	Plain text processing utilities.
+	Utility functions for [go9p]
 
 *	__image__
 
@@ -29,12 +25,11 @@
 
 *	__syscall__
 
-	System functions for Linux and Windows that were
+	System functions for Linux and Windows that are
+	not defined by golang.org/x/sys; some of them are
 	needed to implement the above packages.
 
-	The make use of the `mksyscall*.sh` scripts from `$GOROOT/src/pkg/syscall`.
+	They make use of `mksyscall.pl` resp. `mkwinsyscall` from `$GOROOT/src/pkg/syscall`.
 
-[9P]: http://plan9.bell-labs.com/sys/man/5/INDEX.html
+
 [go9p]: http://code.google.com/p/go9p/
-[hg-git]: http://hg-git.github.com/
-[tokenize]: http://plan9.bell-labs.com/magic/man2html/2/getfields
