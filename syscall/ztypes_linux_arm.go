@@ -3,18 +3,6 @@
 
 package syscall
 
-type Termios struct {
-	Iflag  uint32
-	Oflag  uint32
-	Cflag  uint32
-	Lflag  uint32
-	Line   uint8
-	Cc     [32]uint8
-	Ispeed uint32
-	Ospeed uint32
-}
-type Int int32
-
 type Serial struct {
 	Type            int32
 	Line            int32
