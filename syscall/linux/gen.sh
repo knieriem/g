@@ -11,8 +11,7 @@ mksyscall=`go env GOROOT`/src/syscall/mksyscall.pl
 
 perl $mksyscall -tags ${OS},$ARCH ${pkg}_$OS.go |
 	sed 's/^package.*syscall$$/package $*/' |
-	sed '/^import/a \
-		import "syscall"' |
+	sed '/^import "unsafe"/s/"unsafe"/"syscall"/' |
 	sed 's/Syscall/syscall.Syscall/' |
 	sed 's/SYS_/syscall.SYS_/' |
 	gofmt > z${pkg}_${OS}_$ARCH.go
@@ -29,7 +28,7 @@ package $pkg
 /*
 #include <unistd.h>
 #include <termios.h>
-#include <linux/tty_flags.h>
+#include <linux/serial.h>
 #include <sys/ioctl.h>
 */
 import "C"

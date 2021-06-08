@@ -1,10 +1,27 @@
 package syscall
 
 import (
+	"runtime"
 	"syscall"
+	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
-//sys	IoctlSerial(fd uintptr, action int, s *Serial) (err error) = SYS_IOCTL
+// IoctlSetSerial performs an ioctl on fd with a *Serial.
+func IoctlSetSerial(fd int, value *Serial) error {
+	err := ioctl(fd, unix.TIOCSSERIAL, uintptr(unsafe.Pointer(value)))
+	runtime.KeepAlive(value)
+	return err
+}
+
+func IoctlGetSerial(fd int) (*Serial, error) {
+	var value Serial
+	err := ioctl(fd, unix.TIOCGSERIAL, uintptr(unsafe.Pointer(&value)))
+	return &value, err
+}
+
+//sys	ioctl(fd int, req uint, arg uintptr) (err error)
 
 // Copied from syscall/syscall_unix.go
 
