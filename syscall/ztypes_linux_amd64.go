@@ -23,3 +23,10 @@ type Serial struct {
 	Port_high       uint32
 	Iomap_base      uint64
 }
+
+type SerialRS485 struct {
+	Flags           uint32
+	Rts_before_send uint32
+	Rts_after_send  uint32
+	Padding         [5]uint32
+}

@@ -21,6 +21,19 @@ func IoctlGetSerial(fd int) (*Serial, error) {
 	return &value, err
 }
 
+// IoctlSetSerialRS485 performs an ioctl on fd with a *SerialRS485.
+func IoctlSetSerialRS485(fd int, value *SerialRS485) error {
+	err := ioctl(fd, unix.TIOCSRS485, uintptr(unsafe.Pointer(value)))
+	runtime.KeepAlive(value)
+	return err
+}
+
+func IoctlGetSerialRS485(fd int) (*SerialRS485, error) {
+	var value SerialRS485
+	err := ioctl(fd, unix.TIOCGRS485, uintptr(unsafe.Pointer(&value)))
+	return &value, err
+}
+
 //sys	ioctl(fd int, req uint, arg uintptr) (err error)
 
 // Copied from syscall/syscall_unix.go
