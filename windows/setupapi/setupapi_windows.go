@@ -1,7 +1,7 @@
 // Some utility functions from SetupAPI.
 // (see "Public Device Installation Functions",
-//	http://msdn.microsoft.com/en-us/library/ff549791.aspx)
 //
+//	http://msdn.microsoft.com/en-us/library/ff549791.aspx)
 package setupapi
 
 // http://support.microsoft.com/kb/259695/en-us
@@ -31,11 +31,15 @@ var GuidSerialPorts = &Guid{
 
 //sys SetupDiDestroyDeviceInfoList(devInfoSet syscall.Handle) (err error) = setupapi.SetupDiDestroyDeviceInfoList
 
-//sys	SetupDiGetINFClass(infPath *uint16, guid *Guid, className []uint16, reqSz *uint32) (err error) = setupapi.SetupDiGetINFClassW
+//sys SetupDiGetINFClass(infPath *uint16, guid *Guid, className []uint16, reqSz *uint32) (err error) = setupapi.SetupDiGetINFClassW
 
 //sys SetupDiOpenDevRegKey(devInfoSet syscall.Handle, diData *SpDevinfoData, scope uint32, hwProfile uint32, keyType uint32, desiredAccess uint32) (h syscall.Handle, err error) [failretval==syscall.InvalidHandle] = setupapi.SetupDiOpenDevRegKey
 
 //sys SetupDiGetDeviceInstanceId(devInfoSet syscall.Handle, diData *SpDevinfoData, id []uint16, reqSz *uint32) (err error) = setupapi.SetupDiGetDeviceInstanceIdW
+
+//sys SetupDiOpenDeviceInfo(devInfoSet syscall.Handle, deviceInstanceId *uint16, hwndParent syscall.Handle, openFlags uint32, diData *SpDevinfoData) (err error) = setupapi.SetupDiOpenDeviceInfoW
+
+//sys SetupDiGetDeviceProperty(devInfoSet syscall.Handle, diData *SpDevinfoData, pKey *DevPropKey, pType *DevPropType, pBuffer *byte, pBufferSize uint32, requiredSize *uint32, flags uint32) (err error) = setupapi.SetupDiGetDevicePropertyW
 
 func NewDevinfoData() *SpDevinfoData {
 	d := new(SpDevinfoData)

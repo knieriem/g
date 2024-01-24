@@ -12,3 +12,6 @@ type Guid C.GUID
 const (
 	SpDevinfoDataSz = C.SP_DEVINFO_DATA_SZ
 )
+
+type DevPropKey C.DEVPROPKEY
+type DevPropType C.DEVPROPTYPE
