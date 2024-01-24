@@ -4,6 +4,12 @@
 //	http://msdn.microsoft.com/en-us/library/ff549791.aspx)
 package setupapi
 
+import (
+	"bytes"
+	"encoding/hex"
+	"fmt"
+)
+
 // http://support.microsoft.com/kb/259695/en-us
 
 var GuidSerialPorts = &Guid{
@@ -45,4 +51,53 @@ func NewDevinfoData() *SpDevinfoData {
 	d := new(SpDevinfoData)
 	d.CbSize = SpDevinfoDataSz
 	return d
+}
+
+func NewDevPropKey(guid *Guid, pid uint32) *DevPropKey {
+	return &DevPropKey{
+		Fmtid: *guid,
+		Pid:   pid,
+	}
+}
+
+func NewGuidFromString(s string) (*Guid, error) {
+	return NewGuidFromBytes([]byte(s))
+}
+
+func NewGuidFromBytes(b []byte) (*Guid, error) {
+	b = bytes.Trim(b, "{}")
+
+	if len(b) == 36 {
+		b = bytes.ReplaceAll(b, []byte("-"), []byte(""))
+	}
+	if len(b) != 32 {
+		return nil, fmt.Errorf("invalid guid format/length")
+	}
+
+	d := [8]byte{}
+	if _, err := hex.Decode(d[0:4], b[0:8]); err != nil {
+		return nil, err
+	}
+	data1 := uint32(d[3]) | uint32(d[2])<<8 | uint32(d[1])<<16 | uint32(d[0])<<24
+
+	if _, err := hex.Decode(d[0:2], b[8:12]); err != nil {
+		return nil, err
+	}
+	data2 := uint16(d[1]) | uint16(d[0])<<8
+
+	if _, err := hex.Decode(d[0:2], b[12:16]); err != nil {
+		return nil, err
+	}
+	data3 := uint16(d[1]) | uint16(d[0])<<8
+
+	if _, err := hex.Decode(d[0:8], b[16:]); err != nil {
+		return nil, err
+	}
+
+	return &Guid{
+		Data1: data1,
+		Data2: data2,
+		Data3: data3,
+		Data4: d,
+	}, nil
 }
