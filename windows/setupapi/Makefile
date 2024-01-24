@@ -13,7 +13,6 @@ ZOSARCH=\
 ZITEMS=\
 	const\
 	types\
-	syscall\
 
 ZFILES=\
 	$(foreach f,$(ZITEMS),$(foreach a,$(ZOSARCH),z$(f)_$a.go))\
