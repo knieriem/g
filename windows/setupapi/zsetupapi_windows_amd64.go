@@ -117,8 +117,12 @@ func SetupDiGetDeviceInstanceId(devInfoSet syscall.Handle, diData *SpDevinfoData
 	return
 }
 
-func SetupDiGetDeviceProperty(devInfoSet syscall.Handle, diData *SpDevinfoData, pKey *DevPropKey, pType *DevPropType, pBuffer *byte, pBufferSize uint32, requiredSize *uint32, flags uint32) (err error) {
-	r1, _, e1 := syscall.Syscall9(procSetupDiGetDevicePropertyW.Addr(), 8, uintptr(devInfoSet), uintptr(unsafe.Pointer(diData)), uintptr(unsafe.Pointer(pKey)), uintptr(unsafe.Pointer(pType)), uintptr(unsafe.Pointer(pBuffer)), uintptr(pBufferSize), uintptr(unsafe.Pointer(requiredSize)), uintptr(flags), 0)
+func SetupDiGetDeviceProperty(devInfoSet syscall.Handle, diData *SpDevinfoData, pKey *DevPropKey, pType *DevPropType, buf []byte, size *uint32, flags uint32) (err error) {
+	var _p0 *byte
+	if len(buf) > 0 {
+		_p0 = &buf[0]
+	}
+	r1, _, e1 := syscall.Syscall9(procSetupDiGetDevicePropertyW.Addr(), 8, uintptr(devInfoSet), uintptr(unsafe.Pointer(diData)), uintptr(unsafe.Pointer(pKey)), uintptr(unsafe.Pointer(pType)), uintptr(unsafe.Pointer(_p0)), uintptr(len(buf)), uintptr(unsafe.Pointer(size)), uintptr(flags), 0)
 	if r1 == 0 {
 		err = errnoErr(e1)
 	}

@@ -43,9 +43,9 @@ var GuidSerialPorts = &Guid{
 
 //sys SetupDiGetDeviceInstanceId(devInfoSet syscall.Handle, diData *SpDevinfoData, id []uint16, reqSz *uint32) (err error) = setupapi.SetupDiGetDeviceInstanceIdW
 
-//sys SetupDiOpenDeviceInfo(devInfoSet syscall.Handle, deviceInstanceId *uint16, hwndParent syscall.Handle, openFlags uint32, diData *SpDevinfoData) (err error) = setupapi.SetupDiOpenDeviceInfoW
+//sys SetupDiOpenDeviceInfo(devInfoSet syscall.Handle, deviceInstanceId *uint16, hwndParent syscall.Handle, openFlags uint32, diData *SpDevinfoData) (err error) [failretval == 0] = setupapi.SetupDiOpenDeviceInfoW
 
-//sys SetupDiGetDeviceProperty(devInfoSet syscall.Handle, diData *SpDevinfoData, pKey *DevPropKey, pType *DevPropType, pBuffer *byte, pBufferSize uint32, requiredSize *uint32, flags uint32) (err error) = setupapi.SetupDiGetDevicePropertyW
+//sys SetupDiGetDeviceProperty(devInfoSet syscall.Handle, diData *SpDevinfoData, pKey *DevPropKey, pType *DevPropType, buf []byte, size *uint32, flags uint32) (err error) [failretval == 0] = setupapi.SetupDiGetDevicePropertyW
 
 func NewDevinfoData() *SpDevinfoData {
 	d := new(SpDevinfoData)
