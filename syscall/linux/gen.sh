@@ -1,3 +1,5 @@
+set -e
+
 pkg=syscall
 OS=$GOOS
 ARCH=$GOARCH
