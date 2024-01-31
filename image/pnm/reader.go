@@ -110,7 +110,6 @@ readDim:
 }
 
 // skip PBM whitespace: SPC, TAB, CR, LF, and comments
-//
 func (d *decoder) skipWhite() {
 	var skipLine = false
 
@@ -133,7 +132,6 @@ loop:
 }
 
 // read an ASCII decimal number
-//
 func (d *decoder) btoi(max int) (v int) {
 	var start = true
 

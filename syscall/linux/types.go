@@ -1,4 +1,4 @@
-// +build ignore
+//go:build ignore
 
 package syscall
 
@@ -9,4 +9,4 @@ import "C"
 
 type Serial C.struct_serial_struct
 
-type	SerialRS485 C.struct_serial_rs485
+type SerialRS485 C.struct_serial_rs485

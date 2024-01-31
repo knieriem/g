@@ -5,7 +5,6 @@ import "io"
 // An IndentWriter indents each '\n'-terminated line by
 // a number of '\t' characters.
 // Blank lines can be indented too, optionally.
-//
 type IndentWriter struct {
 	io.Writer
 	indent []byte
